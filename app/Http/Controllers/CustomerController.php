@@ -17,8 +17,7 @@ class CustomerController extends Controller
         Gate::authorize('viewAny', Customer::class);
 
         // query
-        $query = Customer::query()
-            ->orderBy('created_at', 'desc');
+        $query = Customer::query();
         /*
          * Note: This is a simple example, in a real-world application we can
          *      use third party packages like Spatie Query Builder
@@ -30,7 +29,11 @@ class CustomerController extends Controller
                 ->withCount('contacts');
         }
 
-        return CustomerResource::collection($query->paginate(10));
+        return CustomerResource::collection(
+            $query
+                ->orderBy('created_at', 'desc')
+                ->paginate(10)
+        );
     }
 
     public function store(StoreCustomerRequest $request): CustomerResource
