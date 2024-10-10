@@ -1,10 +1,10 @@
 # Laravel API Setup
 
-This is the backend API for the project, powered by Laravel and using SQLite for simplicity. The API handles authentication with Laravel Sanctum and is pre-configured to include a test user for ease of use.
+This is the backend API for the project, powered by Laravel and using SQLite. The API handles authentication with Laravel Sanctum and is pre-configured to include a test user for ease of use.
 
 You can find the frontend repository here: [Frontend Repository](https://github.com/safal123/interview-vue-client)
 
-Follow the instructions to setup the api.
+Follow the instructions to set up the api.
 
 ## Prerequisites
 
@@ -30,11 +30,13 @@ composer install
 
 cp .env.example .env
 
-DB_CONNECTION=sqlite
-SESSION_DOMAIN=localhost
-DB_DATABASE=/absolute/path/to/database.sqlite
-
 touch database/database.sqlite
+
+#Add the following to your .env file
+
+DB_CONNECTION=sqlite
+
+SESSION_DOMAIN=localhost
 
 php artisan key:generate
 
