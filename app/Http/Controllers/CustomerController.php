@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Gate;
@@ -44,20 +45,13 @@ class CustomerController extends Controller
         return CustomerResource::collection($query->paginate(10));
     }
 
-    public function store(): CustomerResource
+    public function store(StoreCustomerRequest $request): CustomerResource
     {
         // Check if the user is authorized to create a customer
         Gate::authorize('create', Customer::class);
 
         // Validate the request
-        $data = request()->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-            // Category can be Gold, Silver, or Bronze
-            'category' => 'required|in:Gold,Silver,Bronze',
-            'reference' => 'required|string|max:255',
-            'start_date' => 'required|date',
-        ]);
+        $data = $request->validated();
 
         // Create the customer
         $customer = Customer::create($data);

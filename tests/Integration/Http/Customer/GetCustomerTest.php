@@ -102,4 +102,38 @@ class GetCustomerTest extends TestCase
         $this->assertCount(10, $response->json('data'));
         $this->assertCount(5, $response->json('data.0.contacts'));
     }
+
+    /**
+     * @test
+     */
+    public function admin_user_can_view_paginated_customers(): void
+    {
+        Customer::factory(20)->create();
+
+        $response = $this->actingAs($this->createAdminUser())
+            ->getJson(route($this->customersRoute));
+
+        $this->assertCount(10, $response->json('data'));
+        $this->assertNotNull($response->json('links'));
+    }
+
+    /**
+     * @test
+     */
+    public function admin_user_can_view_paginated_customers_and_can_visit_next_page(): void
+    {
+        Customer::factory(20)->create();
+
+        $response = $this->actingAs($this->createAdminUser())
+            ->getJson(route($this->customersRoute));
+
+        $this->assertCount(10, $response->json('data'));
+        $this->assertNotNull($response->json('links.next'));
+
+        $response = $this->actingAs($this->createAdminUser())
+            ->getJson($response->json('links.next'));
+
+        $this->assertCount(10, $response->json('data'));
+        $this->assertNotNull($response->json('links.prev'));
+    }
 }
